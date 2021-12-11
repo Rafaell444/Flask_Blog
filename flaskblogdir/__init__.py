@@ -1,9 +1,9 @@
-import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
+
 
 app = Flask(__name__)
 
@@ -17,7 +17,7 @@ bcrypt = Bcrypt(app)
 
 login_manager = LoginManager(app)
 
-login_manager.login_view = "login"
+login_manager.login_view = "users.login"
 
 login_manager.login_message_category = "info"
 
@@ -28,7 +28,14 @@ app.config["MAIL_USERNAME"] = "raforafo26@gmail.com"
 app.config["MAIL_PASSWORD"] = "dpstvcfwwwcppzvy"
 mail = Mail(app)
 
-from flaskblogdir import routes
+from flaskblogdir.users.routes import users
+from flaskblogdir.posts.routes import posts
+from flaskblogdir.main.routes import main
+from flaskblogdir.errors.handlers import errors
 
-# app.config["MAIL_USERNAME"] = os.environ.get("EMAIL_USER")
-# app.config["MAIL_PASSWORD"] = os.environ.get("EMAIL_PASS")
+app.register_blueprint(users)
+app.register_blueprint(posts)
+app.register_blueprint(main)
+app.register_blueprint(errors)
+
+
